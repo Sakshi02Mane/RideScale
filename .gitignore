@@ -1,0 +1,7 @@
+# Ignore large dataset
+cab_rides.csv
+
+# Optional common ignores
+node_modules/
+.env
+.DS_Store
