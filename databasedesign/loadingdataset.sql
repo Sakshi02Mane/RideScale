@@ -1,8 +1,6 @@
--- ================================
--- LOAD DATA INTO EXISTING SCHEMA
--- ================================
 
--- 1️⃣ Create Raw Staging Table (if not already created)
+
+-- Create Raw Staging Table 
 USE ridescale;
 DROP TABLE IF EXISTS cab_rides_raw;
 
@@ -20,7 +18,7 @@ CREATE TABLE cab_rides_raw (
 );
 
 
--- 2️⃣ Load CSV into Raw Table
+--Load CSV into Raw Table
 
 LOAD DATA LOCAL INFILE 'E:/Projects/RideScale/cab_rides.csv'
 INTO TABLE cab_rides_raw
@@ -30,7 +28,7 @@ LINES TERMINATED BY '\n'
 IGNORE 1 ROWS;
 
 
--- 3️⃣ Insert Unique Locations
+--Insert Unique Locations
 
 INSERT IGNORE INTO locations (location_name)
 SELECT DISTINCT source FROM cab_rides_raw;
@@ -39,13 +37,13 @@ INSERT IGNORE INTO locations (location_name)
 SELECT DISTINCT destination FROM cab_rides_raw;
 
 
--- 4️⃣ Insert Cab Types
+--Insert Cab Types
 
 INSERT IGNORE INTO cab_types (cab_type_name)
 SELECT DISTINCT cab_type FROM cab_rides_raw;
 
 
--- 5️⃣ Insert Products
+-- Insert Products
 
 INSERT IGNORE INTO products (product_id, product_name, cab_type_id)
 SELECT DISTINCT
@@ -57,7 +55,7 @@ JOIN cab_types c
 ON r.cab_type = c.cab_type_name;
 
 
--- 6️⃣ Insert Into Sharded rides Table
+--Insert Into Sharded rides Table
 
 INSERT INTO rides (
     original_id,
@@ -89,7 +87,7 @@ JOIN locations ld
     ON r.destination = ld.location_name;
 
 
--- 7️⃣ Check Final Result
+--Check Final Result
 
 SELECT COUNT(*) AS total_rides FROM rides;
 
