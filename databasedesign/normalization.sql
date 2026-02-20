@@ -1,17 +1,32 @@
---Locations schema
 USE ridescale;
-CREATE TABLE locations (
-    location_id INT AUTO_INCREMENT PRIMARY KEY,
-    location_name VARCHAR(100) NOT NULL UNIQUE
-);
 
---Cabs schema
+-- ==========================================
+-- DROP SECTION (Child → Parent)
+-- ==========================================
+
+DROP TABLE IF EXISTS rides_normal;
+DROP TABLE IF EXISTS products;
+DROP TABLE IF EXISTS locations;
+DROP TABLE IF EXISTS cab_types;
+
+
+-- ==========================================
+-- CREATE SECTION (Parent → Child)
+-- ==========================================
+
+-- 1️⃣ Cab Types (Parent Table)
 CREATE TABLE cab_types (
     cab_type_id INT AUTO_INCREMENT PRIMARY KEY,
     cab_type_name VARCHAR(50) NOT NULL UNIQUE
 );
 
---Products schema
+-- 2️⃣ Locations (Parent Table)
+CREATE TABLE locations (
+    location_id INT AUTO_INCREMENT PRIMARY KEY,
+    location_name VARCHAR(100) NOT NULL UNIQUE
+);
+
+-- 3️⃣ Products (Depends on cab_types)
 CREATE TABLE products (
     product_id VARCHAR(50) PRIMARY KEY,
     product_name VARCHAR(50) NOT NULL,
@@ -19,8 +34,8 @@ CREATE TABLE products (
     FOREIGN KEY (cab_type_id) REFERENCES cab_types(cab_type_id)
 );
 
---Rides table
-CREATE TABLE rides (
+-- 4️⃣ Rides (Depends on everything)
+CREATE TABLE rides_normal (
     ride_id BIGINT AUTO_INCREMENT PRIMARY KEY,
 
     original_id BIGINT NOT NULL,
