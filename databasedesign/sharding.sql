@@ -2,16 +2,15 @@
 -- Drop only rides table (keep dimension tables)
 DROP TABLE IF EXISTS rides;
 
--- Recreate rides table WITH sharding
 CREATE TABLE rides (
     ride_id BIGINT AUTO_INCREMENT,
-    original_id BIGINT NOT NULL,
+    original_id VARCHAR(50) NOT NULL,   -- FIXED
     cab_type_id INT NOT NULL,
     product_id VARCHAR(50) NOT NULL,
     source_location_id INT NOT NULL,
     destination_location_id INT NOT NULL,
-    distance_km DECIMAL(5,2) NOT NULL,
-    price DECIMAL(6,2) NOT NULL,
+    distance_km DECIMAL(6,2),
+    price DECIMAL(6,2),
     surge_multiplier DECIMAL(3,2) DEFAULT 1.0,
     ride_timestamp BIGINT NOT NULL,
 
@@ -25,3 +24,4 @@ CREATE TABLE rides (
 )
 PARTITION BY HASH(ride_id)
 PARTITIONS 4;
+SHOW CREATE TABLE rides;
