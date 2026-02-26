@@ -18,7 +18,7 @@ exports.getRideById = async (req, res) => {
 
         // 2️⃣ Fetch from MySQL
         const [rows] = await db.execute(
-            "SELECT * FROM cab_rides_raw WHERE ride_id = ?",
+            "SELECT * FROM cab_rides_raw WHERE id = ?",
             [rideId]
         );
 
