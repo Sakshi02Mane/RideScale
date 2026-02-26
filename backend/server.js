@@ -1,18 +1,11 @@
 const express = require("express");
-const db = require("./db");
+const rideController = require("./rideController");
 
 const app = express();
+const PORT = 3000;
 
-app.get("/", async (req, res) => {
-    try {
-        const [rows] = await db.execute("SELECT 1");
-        res.send("Backend + MySQL connected!");
-    } catch (error) {
-        console.error(error);
-        res.status(500).send("Database connection failed");
-    }
-});
+app.get("/ride/:id", rideController.getRideById);
 
-app.listen(3000, () => {
-    console.log("Server running on port 3000");
+app.listen(PORT, () => {
+    console.log(`🚀 Server running on port ${PORT}`);
 });
