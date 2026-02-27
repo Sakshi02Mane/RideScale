@@ -6,17 +6,17 @@ exports.getRideById = async (req, res) => {
     const cacheKey = `ride:${rideId}`;
 
     try {
-        // 1️⃣ Check Redis
+        // Check Redis
         const cachedRide = await redisClient.get(cacheKey);
 
         if (cachedRide) {
-            console.log("✅ Cache HIT");
+            console.log("Cache HIT");
             return res.json(JSON.parse(cachedRide));
         }
 
-        console.log("❌ Cache MISS - Fetching from MySQL");
+        console.log(" Cache MISS - Fetching from MySQL");
 
-        // 2️⃣ Fetch from MySQL
+        // Fetch from MySQL
         const [rows] = await db.execute(
             "SELECT * FROM cab_rides_raw WHERE id = ?",
             [rideId]
@@ -28,7 +28,7 @@ exports.getRideById = async (req, res) => {
 
         const ride = rows[0];
 
-        // 3️⃣ Store in Redis (TTL 60 seconds)
+        //Store in Redis (TTL 60 seconds)
         await redisClient.setEx(cacheKey, 60, JSON.stringify(ride));
 
         res.json(ride);

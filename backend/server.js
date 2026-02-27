@@ -7,5 +7,5 @@ const PORT = 3000;
 app.get("/ride/:id", rideController.getRideById);
 
 app.listen(PORT, () => {
-    console.log(`🚀 Server running on port ${PORT}`);
+    console.log(`Server running on port ${PORT}`);
 });
